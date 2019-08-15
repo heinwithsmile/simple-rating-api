@@ -7,20 +7,21 @@ import (
 )
 
 //GetDB Function
-func GetDB() (db *sql.DB, err error) {
-	dbDriver := "mysql"
-	dbuser := "root"
-	dbpass := ""
-	dbName := "feedbackdb"
+// func GetDB() (db *sql.DB, err error) {
+// 	dbDriver := "mysql"
+// 	dbuser := "root"
+// 	dbpass := ""
+// 	dbName := "feedbackdb"
 
-	db, err = sql.Open(dbDriver, dbuser+":"+dbpass+"@/"+dbName)
-	return
-}
+// 	db, err = sql.Open(dbDriver, dbuser+":"+dbpass+"@/"+dbName)
+// 	return
+// }
+
 //GetCloudDB Function
 func GetCloudDB() (db *sql.DB, err error) {
 	dbDriver := "mysql"
-	dbuser := "rtuser"
-	dbpass := "rtuser123"
+	dbuser := "root"
+	dbpass := ""
 	dbName := "heineken"
 
 	db, err = sql.Open(dbDriver, dbuser+":"+dbpass+"@/"+dbName)
