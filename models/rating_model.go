@@ -10,28 +10,28 @@ type RatingModel struct {
 	Db *sql.DB
 }
 
-//FindRating Method
-func (ratingModel RatingModel) FindRating() (rating []entities.Rating, err error) {
-	rows, err := ratingModel.Db.Query("SELECT department.id,ratings.rating,ratings.departmentId,department.name_mm FROM ratings INNER JOIN department ON ratings.departmentId=department.id")
+//GetAllData Method
+func (ratingModel RatingModel) GetAllData() (rating []entities.Rating, err error) {
+	rows, err := ratingModel.Db.Query("SELECT departments.id,departments.name,ratings.rating,ratings.departmentId FROM ratings INNER JOIN departments ON ratings.departmentId=departments.id")
 	if err != nil {
 		return nil, err
 	} else {
 		var ratings []entities.Rating
 		for rows.Next() {
 			var id int64
+			var departmentname string
 			var rating int64
 			var departmentID int64
-			var departmentname string
 			// var createddate string
-			err2 := rows.Scan(&id, &rating, &departmentID, &departmentname)
+			err2 := rows.Scan(&id, &departmentname, &rating, &departmentID)
 			if err2 != nil {
 				return nil, err2
 			} else {
 				rating := entities.Rating{
 					ID:             id,
+					DepartmentName: departmentname,
 					Rating:         rating,
 					DepartmentID:   departmentID,
-					DepartmentName: departmentname,
 					// CreatedDate: createddate,
 				}
 				ratings = append(ratings, rating)
@@ -40,8 +40,3 @@ func (ratingModel RatingModel) FindRating() (rating []entities.Rating, err error
 		return ratings, nil
 	}
 }
-
-// //FilterRating Method
-// func (ratingModel RatingModel) FilterRating()(rating){
-
-// }

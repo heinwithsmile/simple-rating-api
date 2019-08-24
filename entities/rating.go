@@ -7,9 +7,9 @@ import (
 //Rating Struct
 type Rating struct {
 	ID             int64  `json:"id"`
+	DepartmentName string `json:"departmentname"`
 	Rating         int64  `json:"rating"`
 	DepartmentID   int64  `json:"departmentID"`
-	DepartmentName string `json:"departmentname"`
 	// CreatedDate string `json:"createdate"`
 }
 
