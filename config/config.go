@@ -9,6 +9,8 @@ import (
 //GetCloudDB Function
 func GetCloudDB() (db *sql.DB, err error) {
 	dbDriver := "mysql"
+	// dbuser := "rtuser"
+	// dbpass := "rtuser123"
 	dbuser := "root"
 	dbpass := ""
 	dbName := "heineken"

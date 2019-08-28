@@ -26,6 +26,24 @@ func GetAllData(response http.ResponseWriter, request *http.Request) {
 	}
 }
 
+//LoadRating Function
+func LoadRating(response http.ResponseWriter, request *http.Request){
+	db, err := config.GetCloudDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest,err.Error())
+	}else{
+		ratingModel := models.RatingModel{
+			Db : db,
+		}
+		ratings, err2 := ratingModel.LoadRating()
+		if err2 != nil{
+			respondWithError(response,http.StatusBadRequest,err2.Error())			
+		}else{
+			respondWithJSON(response, http.StatusOK,ratings)
+		}
+	}
+}
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJSON(w, code, map[string]string{"error": msg})
 }

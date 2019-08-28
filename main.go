@@ -13,6 +13,7 @@ import (
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/ratings", rating_api.GetAllData).Methods("GET")
+	router.HandleFunc("/api/load", rating_api.LoadRating).Methods("GET")
 	router.HandleFunc("/api/department/finddepartments", department_api.FindAllDepartment).Methods("GET")
 	handler := cors.Default().Handler(router)
 	err := http.ListenAndServe(":5001", handler)
