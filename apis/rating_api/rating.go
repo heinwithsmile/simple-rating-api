@@ -1,12 +1,29 @@
 package rating_api
 
 import (
-	"encoding/json"
-
 	"config"
+	"encoding/json"
 	"models"
 	"net/http"
 )
+
+//AllData Function
+func AllData(response http.ResponseWriter, request *http.Request) {
+	db, err := config.GetCloudDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
+		allRatingModel := models.OverallDataModel{
+			Db: db,
+		}
+		alldata, err2 := allRatingModel.AllData()
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, alldata)
+		}
+	}
+}
 
 //GetAllData Function
 func GetAllData(response http.ResponseWriter, request *http.Request) {
@@ -27,19 +44,19 @@ func GetAllData(response http.ResponseWriter, request *http.Request) {
 }
 
 //LoadRating Function
-func LoadRating(response http.ResponseWriter, request *http.Request){
+func LoadRating(response http.ResponseWriter, request *http.Request) {
 	db, err := config.GetCloudDB()
 	if err != nil {
-		respondWithError(response, http.StatusBadRequest,err.Error())
-	}else{
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
 		ratingModel := models.RatingModel{
-			Db : db,
+			Db: db,
 		}
 		ratings, err2 := ratingModel.LoadRating()
-		if err2 != nil{
-			respondWithError(response,http.StatusBadRequest,err2.Error())			
-		}else{
-			respondWithJSON(response, http.StatusOK,ratings)
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, ratings)
 		}
 	}
 }

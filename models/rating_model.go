@@ -12,27 +12,22 @@ type RatingModel struct {
 
 //GetAllData Method
 func (ratingModel RatingModel) GetAllData() (rating []entities.Rating, err error) {
-	rows, err := ratingModel.Db.Query("SELECT ratings.rating,ratings.departmentId FROM ratings")
+	rows, err := ratingModel.Db.Query("SELECT AVG(rating) avg_admin FROM ratings WHERE ratings.departmentId=1")
 	if err != nil {
 		return nil, err
 	} else {
 		var ratings []entities.Rating
 		for rows.Next() {
-			// var id int64
-			// var departmentname string
-			var rating int64
-			var departmentID int64
+			// var rating int64
+			var avg float64
 			// var createddate string
-			err2 := rows.Scan( &rating,&departmentID)
+			err2 := rows.Scan( &avg)
 			if err2 != nil {
 				return nil, err2
 			} else {
 				rating := entities.Rating{
-					// ID:             id,
-					// DepartmentName: departmentname,
-					Rating:         rating,
-					DepartmentID:   departmentID,
-					// CreatedDate: createddate,
+					// Rating:         rating,
+					Avg :   avg,
 				}
 				ratings = append(ratings, rating)
 			}
@@ -42,7 +37,7 @@ func (ratingModel RatingModel) GetAllData() (rating []entities.Rating, err error
 }
 //LoadRating Method
 func (ratingModel RatingModel) LoadRating() (rating []entities.Load, err error) {
-	rows, err := ratingModel.Db.Query("SELECT department.id,ratings.rating,ratings.departmentId,department.name_mm FROM ratings INNER JOIN department ON ratings.departmentId=department.id")
+	rows, err := ratingModel.Db.Query("SELECT department.id ,ratings.rating,ratings.departmentId,department.name_mm FROM ratings INNER JOIN department ON ratings.departmentId=department.id")
 	if err != nil {
 		return nil, err
 	} else {
