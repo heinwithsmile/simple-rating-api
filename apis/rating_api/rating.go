@@ -24,6 +24,58 @@ func AllData(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
+//DailyData Function
+func DailyData(response http.ResponseWriter, request *http.Request) {
+	db, err := config.GetCloudDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
+		allRatingModel := models.OverallDataModel{
+			Db: db,
+		}
+		alldata, err2 := allRatingModel.DailyData()
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, alldata)
+		}
+	}
+}
+//MonthData Function
+func MonthData(response http.ResponseWriter, request *http.Request) {
+	db, err := config.GetCloudDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
+		allRatingModel := models.OverallDataModel{
+			Db: db,
+		}
+		alldata, err2 := allRatingModel.MonthData()
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, alldata)
+		}
+	}
+}
+
+//YearData Function
+func YearData(response http.ResponseWriter, request *http.Request) {
+	db, err := config.GetCloudDB()
+	if err != nil {
+		respondWithError(response, http.StatusBadRequest, err.Error())
+	} else {
+		allRatingModel := models.OverallDataModel{
+			Db: db,
+		}
+		alldata, err2 := allRatingModel.YearData()
+		if err2 != nil {
+			respondWithError(response, http.StatusBadRequest, err2.Error())
+		} else {
+			respondWithJSON(response, http.StatusOK, alldata)
+		}
+	}
+}
 
 //GetAllData Function
 func GetAllData(response http.ResponseWriter, request *http.Request) {
@@ -42,6 +94,7 @@ func GetAllData(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
+
 
 //LoadRating Function
 func LoadRating(response http.ResponseWriter, request *http.Request) {
