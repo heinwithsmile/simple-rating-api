@@ -24,8 +24,9 @@ func AllData(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
-//DailyData Function
-func DailyData(response http.ResponseWriter, request *http.Request) {
+
+//WeeklyData Function
+func WeeklyData(response http.ResponseWriter, request *http.Request) {
 	db, err := config.GetCloudDB()
 	if err != nil {
 		respondWithError(response, http.StatusBadRequest, err.Error())
@@ -33,7 +34,7 @@ func DailyData(response http.ResponseWriter, request *http.Request) {
 		allRatingModel := models.OverallDataModel{
 			Db: db,
 		}
-		alldata, err2 := allRatingModel.DailyData()
+		alldata, err2 := allRatingModel.WeeklyData()
 		if err2 != nil {
 			respondWithError(response, http.StatusBadRequest, err2.Error())
 		} else {
@@ -41,6 +42,7 @@ func DailyData(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
+
 //MonthData Function
 func MonthData(response http.ResponseWriter, request *http.Request) {
 	db, err := config.GetCloudDB()
@@ -94,7 +96,6 @@ func GetAllData(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
-
 
 //LoadRating Function
 func LoadRating(response http.ResponseWriter, request *http.Request) {

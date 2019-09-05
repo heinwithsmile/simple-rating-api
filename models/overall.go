@@ -12,7 +12,7 @@ type OverallDataModel struct {
 
 //AllData Method
 func (allRatingModel OverallDataModel) AllData() (alldata []entities.OverALLData, err error) {
-	rows, err := allRatingModel.Db.Query("SELECT department.id,department.name_mm,department.name_en,AVG(ratings.rating) average_rating,COUNT(*) 'sum',COUNT(IF(ratings.rating = 0 ,1, NULL)) 'verypoor',COUNT(IF(ratings.rating = 1 ,1, NULL)) 'poor',COUNT(IF(ratings.rating = 2 ,1, NULL)) 'average',COUNT(IF(ratings.rating = 3 ,1, NULL)) 'good',COUNT(IF(ratings.rating = 4 ,1, NULL)) 'verygood' FROM ratings INNER JOIN department ON ratings.departmentId = department.id GROUP BY departmentId ORDER BY id")
+	rows, err := allRatingModel.Db.Query("SELECT department.id, department.name_mm, department.name_en, AVG(ratings.rating) average_rating, COUNT(*) 'sum', COUNT( IF(ratings.rating = 0, 1, NULL) ) 'verypoor', COUNT( IF(ratings.rating = 1, 1, NULL) ) 'poor', COUNT( IF(ratings.rating = 2, 1, NULL) ) 'average', COUNT( IF(ratings.rating = 3, 1, NULL) ) 'good', COUNT( IF(ratings.rating = 4, 1, NULL) ) 'verygood',CONCAT(ROUND((COUNT(IF(ratings.rating = 0, 1, NULL)) / COUNT(*) * 100),2),'%') AS vppercent,CONCAT(ROUND((COUNT(IF(ratings.rating = 1, 1, NULL)) / COUNT(*) * 100),2),'%') AS ppercent,CONCAT(ROUND((COUNT(IF(ratings.rating = 2, 1, NULL)) / COUNT(*) * 100),2),'%') AS avgpercent,CONCAT(ROUND((COUNT(IF(ratings.rating = 3, 1, NULL)) / COUNT(*) * 100),2),'%') AS gdpercent,CONCAT(ROUND((COUNT(IF(ratings.rating = 4, 1, NULL)) / COUNT(*) * 100),2),'%') AS vgpercent FROM ratings INNER JOIN department ON ratings.departmentId = department.id GROUP BY `departmentId` ORDER BY id")
 	if err != nil {
 		return nil, err
 	} else {
@@ -28,21 +28,31 @@ func (allRatingModel OverallDataModel) AllData() (alldata []entities.OverALLData
 			var average int64
 			var good int64
 			var verygood int64
-			err2 := rows.Scan(&id, &namemm, &nameen, &avgrating, &sum, &verypoor, &poor, &average, &good, &verygood)
+			var vppercent string
+			var ppercent string
+			var avgpercent string
+			var gpercent string
+			var vgpercent string
+			err2 := rows.Scan(&id, &namemm, &nameen, &avgrating, &sum, &verypoor, &poor, &average, &good, &verygood, &vppercent, &ppercent, &avgpercent, &gpercent, &vgpercent)
 			if err2 != nil {
 				return nil, err2
 			} else {
 				data := entities.OverALLData{
-					ID:        id,
-					NameMM:    namemm,
-					NameEN:    nameen,
-					AvgRating: avgrating,
-					Sum:       sum,
-					VeryPoor:  verypoor,
-					Poor:      poor,
-					Average:   average,
-					Good:      good,
-					VeryGood:  verygood,
+					ID:         id,
+					NameMM:     namemm,
+					NameEN:     nameen,
+					AvgRating:  avgrating,
+					Sum:        sum,
+					VeryPoor:   verypoor,
+					Poor:       poor,
+					Average:    average,
+					Good:       good,
+					VeryGood:   verygood,
+					Vppercent:  vppercent,
+					Ppercent:   ppercent,
+					Avgpercent: avgpercent,
+					Gpercent:   gpercent,
+					Vgpercent:  vgpercent,
 				}
 				alldata = append(alldata, data)
 			}
@@ -51,9 +61,9 @@ func (allRatingModel OverallDataModel) AllData() (alldata []entities.OverALLData
 	}
 }
 
-//DailyData Method
-func (allRatingModel OverallDataModel) DailyData() (alldata []entities.OverALLData, err error) {
-	rows, err := allRatingModel.Db.Query("SELECT department.id, department.name_mm, department.name_en, AVG(ratings.rating) average_rating, COUNT(*) 'sum', COUNT( IF(ratings.rating = 0, 1, NULL) ) 'verypoor', COUNT( IF(ratings.rating = 1, 1, NULL) ) 'poor', COUNT( IF(ratings.rating = 2, 1, NULL) ) 'average', COUNT( IF(ratings.rating = 3, 1, NULL) ) 'good', COUNT( IF(ratings.rating = 4, 1, NULL) ) 'verygood' FROM ratings INNER JOIN department ON ratings.departmentId = department.id WHERE `createdOn` > DATE_ADD(DATE(NOW()), INTERVAL - 1 DAY) AND `createdOn` < DATE(NOW()) GROUP BY `departmentId`, DATE(NOW()) ORDER BY id")
+//WeeklyData Method
+func (allRatingModel OverallDataModel) WeeklyData() (alldata []entities.OverALLData, err error) {
+	rows, err := allRatingModel.Db.Query("SELECT department.id, department.name_mm, department.name_en, AVG(ratings.rating) average_rating, COUNT(*) 'sum', COUNT( IF(ratings.rating = 0, 1, NULL) ) 'verypoor', COUNT( IF(ratings.rating = 1, 1, NULL) ) 'poor', COUNT( IF(ratings.rating = 2, 1, NULL) ) 'average', COUNT( IF(ratings.rating = 3, 1, NULL) ) 'good', COUNT( IF(ratings.rating = 4, 1, NULL) ) 'verygood' FROM ratings INNER JOIN department ON ratings.departmentId = department.id WHERE `createdOn`>= DATE_SUB(CURDATE(), INTERVAL 10 DAY) GROUP BY `departmentId` ORDER BY id")
 	if err != nil {
 		return nil, err
 	} else {
@@ -173,4 +183,3 @@ func (allRatingModel OverallDataModel) YearData() (alldata []entities.OverALLDat
 		return alldata, nil
 	}
 }
-

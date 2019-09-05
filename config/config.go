@@ -14,7 +14,6 @@ func GetCloudDB() (db *sql.DB, err error) {
 	dbuser := "root"
 	dbpass := ""
 	dbName := "heineken"
-
 	db, err = sql.Open(dbDriver, dbuser+":"+dbpass+"@/"+dbName)
 	return
 }

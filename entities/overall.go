@@ -30,10 +30,15 @@ type OverALLData struct {
 	Average   int64   `json:"average"`
 	Good      int64   `json:"good"`
 	VeryGood  int64   `json:"verygood"`
+	Vppercent string `json:"vppercent"`
+	Ppercent string `json:"ppercent"`
+	Avgpercent string `json:"avgpercent"`
+	Gpercent string `json:"gpercent"`
+	Vgpercent string `json:"vgpercent"`
 	// CreatedDate string `json:"createdate"`
 }
 
 //ToString Function
 func (data OverALLData) ToString() string {
-	return fmt.Sprintf("id:%d\nnamemm:%s\nnameen:%s\navgrating:%f\nsum:%d\nverypoor:%d\npoor%d\naverage:%d\ngood:%d\nverygood:%d\n", data.ID, data.NameMM, data.NameEN, data.AvgRating, data.Sum, data.VeryPoor, data.Poor, data.Average, data.Good, data.VeryGood)
+	return fmt.Sprintf("id:%d\nnamemm:%s\nnameen:%s\navgrating:%f\nsum:%d\nverypoor:%d\npoor%d\naverage:%d\ngood:%d\nverygood:%d\nvppercent:%f\nppercent:%f\navgpercent:%f\ngdpercent:%f\nvgpercent:%f\n", data.ID, data.NameMM, data.NameEN, data.AvgRating, data.Sum, data.VeryPoor, data.Poor, data.Average, data.Good, data.VeryGood,data.Vppercent,data.Ppercent,data.Avgpercent,data.Gpercent,data.Vgpercent)
 }
